@@ -1,6 +1,9 @@
 "use server";
 
+import { signIn } from "@/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { loginFormschema } from "@/schemas";
+import { AuthError } from "next-auth";
 import { z } from "zod";
 
 export const login = async ({
@@ -11,8 +14,30 @@ export const login = async ({
   const validatedFeilds = loginFormschema.safeParse(values);
 
   if (!validatedFeilds.success) {
-    return { error: "Invalid feilds" };
+    return { error: "Invalid feilds", success: undefined };
   }
 
-  return { success: "Email sent!" };
+  const { email, password } = validatedFeilds.data;
+
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    });
+  } catch (err) {
+    if (err instanceof AuthError) {
+      switch (err.type) {
+        case "CredentialsSignin": {
+          return { error: "Invalid credentails", success: undefined };
+        }
+        default: {
+          return { error: "Something went wrong", success: undefined };
+        }
+      }
+    }
+    throw err;
+  }
+
+  return { success: "Email sent!", error: undefined };
 };

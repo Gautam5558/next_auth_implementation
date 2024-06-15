@@ -16,8 +16,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import FormError from "../FormError";
 import FormSuccess from "../FormSuccess";
-import { login } from "@/actions/login";
 import { useState } from "react";
+import { register } from "@/actions/register";
 
 const RegisterForm = () => {
   const form = useForm<z.infer<typeof registerFormschema>>({
@@ -34,10 +34,11 @@ const RegisterForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
 
   async function onSubmit(values: z.infer<typeof registerFormschema>) {
+    console.log(values);
     setError("");
     setSuccess("");
     setIsLoading(true);
-    const res = await login({ values });
+    const res = await register({ values });
     setIsLoading(false);
     setError(res.error);
     setSuccess(res.success);
