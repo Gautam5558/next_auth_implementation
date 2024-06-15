@@ -38,8 +38,8 @@ const LoginForm = () => {
     setIsLoading(true);
     const res = await login({ values });
     setIsLoading(false);
-    setError(res.error);
-    setSuccess(res.success);
+    setError(res?.error);
+    setSuccess(res?.success);
   }
 
   return (
