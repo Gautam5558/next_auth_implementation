@@ -18,6 +18,7 @@ import FormError from "../FormError";
 import FormSuccess from "../FormSuccess";
 import { login } from "@/actions/login";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof loginFormschema>>({
@@ -31,6 +32,11 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
+  const searchParams = useSearchParams();
+  const errorMessage =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with a different provider!"
+      : "";
 
   async function onSubmit(values: z.infer<typeof loginFormschema>) {
     setError(undefined);
@@ -89,7 +95,9 @@ const LoginForm = () => {
               )}
             />
           </div>
-          {error && <FormError message={error} />}
+          {(error || errorMessage.length > 0) && (
+            <FormError message={error || errorMessage} />
+          )}
           {success && <FormSuccess message={success} />}
           <Button className="w-full" type="submit" disabled={isLoading}>
             Login
