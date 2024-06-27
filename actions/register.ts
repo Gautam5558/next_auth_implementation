@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { registerFormschema } from "@/schemas";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
+import { getVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const register = async ({
   values,
@@ -46,6 +48,9 @@ export const register = async ({
   console.log(newUser);
 
   // TODO send verification email
+
+  const verificationToken = await getVerificationToken(email);
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
   return { success: "Email sent" };
 };
