@@ -13,7 +13,12 @@ export const apiAuthPrefix = "/api/auth";
 // And it used isnt logged in and tries to access the "/settings" route which is protected,
 // they will get redirected to login route
 
-export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/error",
+  "/auth/reset",
+];
 
 // When a person logs in we will redirect them to "/settings route"
 
