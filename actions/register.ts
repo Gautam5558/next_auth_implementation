@@ -14,7 +14,7 @@ export const register = async ({
 }) => {
   const validateFeilds = registerFormschema.safeParse(values);
   if (!validateFeilds.success) {
-    return { error: "Invalid feilds" };
+    return { error: "Invalid feilds", success: undefined };
   }
 
   // now lets create our 1st user as client is generated
