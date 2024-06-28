@@ -1,6 +1,10 @@
 // these are public rotes, anyone can acces them
 
-export const publicRoutes = ["/", "/auth/new-verification"];
+export const publicRoutes = [
+  "/",
+  "/auth/new-verification",
+  "/auth/new-password",
+];
 
 // Routes that are used by nextjs to facilitate auth like /api/auth/...
 // So these routes are hit by nextjs for auth to work , hence they are made public

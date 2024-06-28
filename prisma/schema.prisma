@@ -50,6 +50,8 @@ model User {
 }
 
 
+// Creating a schema for email verification when using credentials for auth
+
 model VerificationToken {
   id    String @id @default(cuid())
   email String 
@@ -57,4 +59,14 @@ model VerificationToken {
   expires DateTime
 
   @@unique([email,token])
+}
+
+
+// Creating a schema for reset password email verification when forgetting password
+
+model PasswordResetToken {
+  id String @id @default(uuid())
+  email String
+  token String @unique
+  expires DateTime
 }

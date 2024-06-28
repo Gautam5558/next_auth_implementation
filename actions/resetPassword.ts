@@ -1,6 +1,8 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { sendPasswordResetEmail } from "@/lib/mail";
+import { getPasswordResetToken } from "@/lib/tokens";
 import { ResetFormschema } from "@/schemas";
 import { z } from "zod";
 
@@ -22,6 +24,11 @@ export const resetPassword = async (
   }
 
   // To do => send user an email to reset password
+  const passwordResetToken = await getPasswordResetToken(email);
+  await sendPasswordResetEmail(
+    passwordResetToken.email,
+    passwordResetToken.token
+  );
 
   return { success: "Reset Password Email Sent!", error: undefined };
 };
