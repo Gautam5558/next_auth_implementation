@@ -3,6 +3,8 @@ import * as z from "zod";
 export const loginFormschema = z.object({
   email: z.string().email({ message: "Email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
+  // adding an optional field if 2FA is enabled for the 2FA code
+  code: z.optional(z.string()),
 });
 
 export const registerFormschema = z.object({
