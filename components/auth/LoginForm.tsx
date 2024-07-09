@@ -33,6 +33,10 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<string | undefined>(undefined);
+  // This state is used to show 2FA UI if it is enabled when we try to login using credentials
+  // As 2FA is only for credentials , Google , Github is already 2FA intrinsically
+  const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
+
   const searchParams = useSearchParams();
   const errorMessage =
     searchParams.get("error") === "OAuthAccountNotLinked"
@@ -47,6 +51,10 @@ const LoginForm = () => {
     setIsLoading(false);
     setError(res?.error);
     setSuccess(res?.success);
+    console.log(res);
+    if (res?.twoFactor) {
+      setShowTwoFactor(true);
+    }
   }
 
   return (
@@ -59,52 +67,75 @@ const LoginForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="johndoe@example.com"
-                      {...field}
-                      type="email"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="******"
-                      {...field}
-                      type="password"
-                    />
-                  </FormControl>
-                  <Button className="px-0 font-normal" variant="link">
-                    <Link href="/auth/reset">Forgot password?</Link>
-                  </Button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {showTwoFactor && (
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Two Factor Code</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        placeholder="12345"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {!showTwoFactor && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isLoading}
+                          placeholder="johndoe@example.com"
+                          {...field}
+                          type="email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isLoading}
+                          placeholder="******"
+                          {...field}
+                          type="password"
+                        />
+                      </FormControl>
+                      <Button className="px-0 font-normal" variant="link">
+                        <Link href="/auth/reset">Forgot password?</Link>
+                      </Button>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
           </div>
           {(error || errorMessage.length > 0) && (
             <FormError message={error || errorMessage} />
           )}
           {success && <FormSuccess message={success} />}
           <Button className="w-full" type="submit" disabled={isLoading}>
-            Login
+            {showTwoFactor ? "Confirm" : "Login"}
           </Button>
         </form>
       </Form>

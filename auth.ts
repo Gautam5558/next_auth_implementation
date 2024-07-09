@@ -11,6 +11,7 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import authConfig from "./auth.config";
+import { getTwofactorConfirmationByUserId } from "./data/twoFactorConfirmation";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -46,6 +47,22 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // prevent login without email verification
       if (!existingUser?.emailVerified) {
         return false;
+      }
+
+      // prevent login if 2FA enabled
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwofactorConfirmationByUserId(
+          existingUser.id
+        );
+
+        if (!twoFactorConfirmation) {
+          return false;
+        }
+
+        // delete two factor confirmation for next signin (This behaviour is optional => You can either 2FA each time user logs in or only for the 1st time, here i am implementing it for every login hence i am deleting my @FA confirmation after login)
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
       }
 
       return true;
