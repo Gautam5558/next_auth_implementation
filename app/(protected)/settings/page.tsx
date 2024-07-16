@@ -1,19 +1,31 @@
-import { auth, signOut } from "@/auth";
+"use client";
+import { logout } from "@/actions/logout";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import React from "react";
 
-const Settings = async () => {
-  const session = await auth();
+// Settings page in case when page.tsx is a client component => we will logout and get currently
+// logged in user's data in the following way as menthtioned in the code below and layout.tsx
+
+// Another way to logout when page.tsx / settings page is a client component
+
+const Settings = () => {
+  const user = useCurrentUser();
+  console.log(user);
+
+  const handleClick = async () => {
+    await logout();
+  };
 
   return (
-    <div>
-      <form
-        action={async () => {
-          "use server";
-          await signOut();
+    <div className="bg-white p-10 rounded-xl">
+      <button
+        type="submit"
+        onClick={() => {
+          handleClick();
         }}
       >
-        <button type="submit">Sign Out</button>
-      </form>
+        Sign Out
+      </button>
     </div>
   );
 };
