@@ -10,7 +10,6 @@ import React from "react";
 
 const Settings = () => {
   const user = useCurrentUser();
-  console.log(user);
 
   const handleClick = async () => {
     await logout();
