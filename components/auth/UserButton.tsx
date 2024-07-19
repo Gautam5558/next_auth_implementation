@@ -13,7 +13,6 @@ import { RxExit } from "react-icons/rx";
 
 const UserButton = () => {
   const user = useCurrentUser();
-  console.log(user);
 
   return (
     <DropdownMenu>
