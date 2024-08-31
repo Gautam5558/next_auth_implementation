@@ -1,11 +1,11 @@
-import { auth } from "@/auth";
+import UserInfo from "@/components/UserInfo";
 import { currentUser } from "@/lib/currentUser";
 import React from "react";
 
 const ServerPage = async () => {
   const user = await currentUser();
 
-  return <div></div>;
+  return <UserInfo label="💻Server component" user={user} />;
 };
 
 export default ServerPage;
