@@ -106,7 +106,6 @@ export const login = async ({
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-    console.log("hnji");
   } catch (err) {
     if (err instanceof AuthError) {
       switch (err.type) {
@@ -118,8 +117,9 @@ export const login = async ({
         }
       }
     }
+    console.log("wtf!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     throw err;
   }
-
+  console.log("yes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
   return { success: "Email sent!", error: undefined };
 };

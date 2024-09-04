@@ -43,10 +43,6 @@ export const register = async ({
     },
   });
 
-  console.log("hnji");
-
-  console.log(newUser);
-
   // TODO send verification email
 
   const verificationToken = await getVerificationToken(email);

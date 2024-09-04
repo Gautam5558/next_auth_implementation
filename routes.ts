@@ -8,7 +8,7 @@ export const publicRoutes = [
 
 // Routes that are used by nextjs to facilitate auth like /api/auth/...
 // So these routes are hit by nextjs for auth to work , hence they are made public
-// These routes start with with foloowing prefix
+// These routes start with with following prefix
 
 export const apiAuthPrefix = "/api/auth";
 
