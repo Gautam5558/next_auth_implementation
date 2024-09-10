@@ -117,9 +117,8 @@ export const login = async ({
         }
       }
     }
-    console.log("wtf!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     throw err;
   }
-  console.log("yes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
+
   return { success: "Email sent!", error: undefined };
 };
